@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkingWithXMLApplication.MainPage"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="20"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
+            <Label
+                Text="Робота з XML файлами"
+                FontAttributes="Bold"
+                FontSize="28"
+                TextColor="#512BD4"
+                HorizontalOptions="Center" />
+
+            <Button 
+                Text="Обрати XML файл" 
+                Clicked="OnOpenFileButtonClicked"
+                HorizontalOptions="Center"
+                BackgroundColor="#512BD4"
+                TextColor="White"
+                FontSize="18"
+                CornerRadius="8"
+                WidthRequest="200" />
+
+            <Label
+                x:Name="PathToFile"
+                Text="Немає обраного файлу"
+                HorizontalOptions="Center"
+                TextColor="Gray"
+                FontSize="16"
+                Padding="10,0,10,0"/>
+
+            <Label x:Name="ParsingTecnology" Text="Виберіть технологію для парсингу: " FontSize="18" HorizontalOptions="Center" IsVisible="False" Margin="0,20,0,0"/>
+            <StackLayout x:Name="ParsingOptions" IsVisible="False" Orientation="Horizontal" HorizontalOptions="Center">
+                <RadioButton 
+                    x:Name="LINQRadioButton" 
+                    GroupName="ParsingTech" 
+                    Content="LINQ" 
+                    Value="LINQ" 
+                    IsChecked="True"
+                    CheckedChanged="OnParsingMethodChanged"/>
+                <RadioButton 
+                    x:Name="SAXRadioButton" 
+                    GroupName="ParsingTech" 
+                    Content="SAX" 
+                    Value="SAX"
+                    CheckedChanged="OnParsingMethodChanged"/>
+                <RadioButton 
+                    x:Name="DOMRadioButton" 
+                    GroupName="ParsingTech" 
+                    Content="DOM" 
+                    Value="DOM"
+                    CheckedChanged="OnParsingMethodChanged"/>
+            </StackLayout>
+            
+            <Button 
+                x:Name="OpenScheduleButton"
+                Text="Відкрити розклад" 
+                Clicked="OnOpenScheduleButtonClicked"
+                HorizontalOptions="Center"
+                BackgroundColor="#32CD32"
+                TextColor="White"
+                FontSize="18"
+                CornerRadius="8"
+                WidthRequest="200"
+                IsVisible="False" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,58 @@
+<Schedules>
+	<Course>
+		<Title>Математична логіка</Title>
+		<Instructor>
+			<FullName>Олександр Галавай</FullName>
+			<Faculty>ФКНК</Faculty>
+			<Department>ТТП</Department>
+		</Instructor>
+		<Room>308</Room>
+		<ScheduleTime>08:40 - 10:15</ScheduleTime>
+		<Students>
+			<Student>
+				<FullName>Тарас Тертичний</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Всеволод Остапович</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Максим Безверхий</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Віктор Сікора</FullName>
+				<Group>К-26</Group>
+			</Student>
+		</Students>
+	</Course>
+	<Course>
+		<Title>Диференціальні Рівняння</Title>
+		<Instructor>
+			<FullName>Володимир Матвієнко</FullName>
+			<Faculty>ФКНК</Faculty>
+			<Department>МСС</Department>
+		</Instructor>
+		<Room>306</Room>
+		<ScheduleTime>10:35 - 12:10</ScheduleTime>
+		<Students>
+			<Student>
+				<FullName>Тарас Тертичний</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Всеволод Остапович</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Максим Безверхий</FullName>
+				<Group>К-26</Group>
+			</Student>
+			<Student>
+				<FullName>Віктор Сікора</FullName>
+				<Group>К-26</Group>
+			</Student>
+		</Students>
+	</Course>
+</Schedules>
