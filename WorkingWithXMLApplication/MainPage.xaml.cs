@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using static System.Net.Mime.MediaTypeNames;
 using WorkingWithXMLApplication.ParsingStrategy;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Handlers;
 
 namespace WorkingWithXMLApplication
 {

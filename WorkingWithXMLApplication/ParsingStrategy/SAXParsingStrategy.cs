@@ -97,7 +97,7 @@ namespace WorkingWithXMLApplication.ParsingStrategy
                     }
                 }
             }
-            using (StreamWriter writer = new StreamWriter("C:\\Users\\vikto\\source\\repos\\Lab2\\WorkingWithXMLApplication\\log.txt", false))
+            using (StreamWriter writer = new StreamWriter("C:\\Users\\vikto\\source\\repos\\Lab2\\WorkingWithXMLApplication\\Temp\\log.txt", false))
             {
                 foreach (var course in schedule.Courses)
                 {
