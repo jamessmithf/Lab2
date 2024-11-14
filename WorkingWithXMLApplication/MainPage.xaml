@@ -34,6 +34,32 @@
                 FontSize="16"
                 Padding="10,0,10,0"/>
 
+            <Frame x:Name="FiltersMenu" IsVisible="False" BackgroundColor="Linen">
+                <VerticalStackLayout Spacing="25">
+                    <Label 
+                        HorizontalOptions="Center"
+                        Text="Введіть фільтри для пошуку:" 
+                        FontSize="18" 
+                        FontAttributes="Bold" />
+                    <HorizontalStackLayout Spacing="10">
+                        <StackLayout>
+                            <Label Text="Назва дисципліни" />
+                            <Entry x:Name="CourseNameFilter" Placeholder="Введіть назву дисципліни" BackgroundColor="White" />
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="ПІБ Викладача" />
+                            <Entry x:Name="InstructorNameFilter" Placeholder="Введіть ПІБ викладача" BackgroundColor="White" />
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="Час" />
+                            <Entry x:Name="TimeFilter" Placeholder="Введіть час (приклад, 08:40)" BackgroundColor="White" />
+                        </StackLayout>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>          
+
             <Label x:Name="ParsingTecnology" Text="Виберіть технологію для парсингу: " FontSize="18" HorizontalOptions="Center" IsVisible="False" Margin="0,20,0,0"/>
             <StackLayout x:Name="ParsingOptions" IsVisible="False" Orientation="Horizontal" HorizontalOptions="Center">
                 <RadioButton 

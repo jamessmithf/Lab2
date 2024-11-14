@@ -8,7 +8,6 @@ namespace WorkingWithXMLApplication
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
-            //MainPage = new AppShell();
         }
 
         protected override Window CreateWindow(IActivationState activationState)
@@ -17,8 +16,9 @@ namespace WorkingWithXMLApplication
             if (window != null)
             {
                 window.Title = "Робота з .xml файлами";
+                window.Width = 750;
+                window.Height = 750;
             }
-            window.Width = 700;
 
 #if WINDOWS
         window.Created += (s, e) =>

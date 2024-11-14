@@ -35,6 +35,7 @@ namespace WorkingWithXMLApplication
                 _selectedFilePath = result.FullPath;
                 PathToFile.Text = $"Відкрито {SelectedFilePath}";
 
+                FiltersMenu.IsVisible = true;
                 ParsingTecnology.IsVisible = true;
                 ParsingOptions.IsVisible = true;
                 OpenScheduleButton.IsVisible = true;                
@@ -58,23 +59,16 @@ namespace WorkingWithXMLApplication
 
 
         private async void OnOpenScheduleButtonClicked(object sender, EventArgs e)
-        {
-            try
+        {           
+            IParsingStrategy selectedParsingStrategy = SelectedParsingMethod switch
             {
-                IParsingStrategy selectedParsingStrategy = SelectedParsingMethod switch
-                {
-                    "LINQ" => new LINQParsingStrategy(),
-                    "SAX" => new SAXParsingStrategy(),
-                    "DOM" => new DOMParsingStrategy(),
-                    _ => throw new InvalidOperationException("Стратегія не вибрана")
-                };
+                "LINQ" => new LINQParsingStrategy(),
+                "SAX" => new SAXParsingStrategy(),
+                "DOM" => new DOMParsingStrategy(),
+                _ => throw new InvalidOperationException("Стратегія не вибрана")
+            };
 
-                await Navigation.PushAsync(new InfoSheet(SelectedFilePath, selectedParsingStrategy));
-            }
-            catch (InvalidOperationException ex)
-            {
-                await DisplayAlert("Помилка", ex.Message, "ОК");
-            }
+            await Navigation.PushAsync(new InfoSheet(SelectedFilePath, selectedParsingStrategy));
         }
     }
 }
