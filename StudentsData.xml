@@ -1,57 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="schedule_transform.xsl"?>
 <Schedules>
-	<Course>
-		<Title>Математична логіка</Title>
-		<Instructor>
+	<Course Day="Понеділок" Title="Математична логіка" Room="308" ScheduleTime="08:40 - 10:15">
+		<Instructor Faculty="ФКНК" Department="ТТП">
 			<FullName>Олександр Галавай</FullName>
-			<Faculty>ФКНК</Faculty>
-			<Department>ТТП</Department>
 		</Instructor>
-		<Room>308</Room>
-		<ScheduleTime>08:40 - 10:15</ScheduleTime>
 		<Students>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Тарас Тертичний</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Всеволод Остапович</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Максим Безверхий</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Віктор Сікора</FullName>
-				<Group>К-26</Group>
 			</Student>
 		</Students>
 	</Course>
-	<Course>
-		<Title>Диференціальні Рівняння</Title>
-		<Instructor>
+	<Course Day="Вівторок" Title="Диференціальні Рівняння" Room="306" ScheduleTime="10:35 - 12:10">
+		<Instructor Faculty="ФКНК" Department="МСС">
 			<FullName>Володимир Матвієнко</FullName>
-			<Faculty>ФКНК</Faculty>
-			<Department>МСС</Department>
 		</Instructor>
-		<Room>306</Room>
-		<ScheduleTime>10:35 - 12:10</ScheduleTime>
 		<Students>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Тарас Тертичний</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Всеволод Остапович</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Максим Безверхий</FullName>
-				<Group>К-26</Group>
 			</Student>
-			<Student>
+			<Student Group="К-26">
 				<FullName>Віктор Сікора</FullName>
-				<Group>К-26</Group>
 			</Student>
 		</Students>
 	</Course>

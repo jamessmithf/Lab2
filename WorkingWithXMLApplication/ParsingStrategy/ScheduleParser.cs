@@ -11,7 +11,8 @@
 
         public Schedule Parse(string SelectedFilePath)
         {
-            return _parsingStrategy.Parse(SelectedFilePath);
+            Schedule result = _parsingStrategy.Parse(SelectedFilePath);
+            return result;
         }
     }
 }

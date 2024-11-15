@@ -1,8 +1,7 @@
-﻿using System.IO;
-using static System.Net.Mime.MediaTypeNames;
-using WorkingWithXMLApplication.ParsingStrategy;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Handlers;
+﻿using WorkingWithXMLApplication.ParsingStrategy;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Xsl;
 
 namespace WorkingWithXMLApplication
 {
@@ -16,6 +15,21 @@ namespace WorkingWithXMLApplication
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        public static List<string?> GetUniqueValue(string filePath, string node, string atribute)
+        {
+            
+            var xmlDocument = XDocument.Load(filePath);
+
+            // Отримати унікальні значення атрибуту "atribute" з елементів "node"
+            var uniqueValues = xmlDocument.Descendants(node)
+                                .Select(course => (string)course.Attribute(atribute))
+                                .Where(day => day != null) // Перевірка на null
+                                .Distinct()
+                                .ToList();
+
+            return uniqueValues;
         }
 
         public async void OnOpenFileButtonClicked(object sender, EventArgs e)
@@ -38,8 +52,32 @@ namespace WorkingWithXMLApplication
                 FiltersMenu.IsVisible = true;
                 ParsingTecnology.IsVisible = true;
                 ParsingOptions.IsVisible = true;
-                OpenScheduleButton.IsVisible = true;                
+                OpenScheduleButton.IsVisible = true;
+
+                List<string?> uniqueDays = GetUniqueValue(SelectedFilePath, "Course", "Day");
+                List<string?> uniqueRooms = GetUniqueValue(SelectedFilePath, "Course", "Room");
+
+                DayPicker.Items.Add(" ");
+                foreach (string day in uniqueDays)
+                {
+                    DayPicker.Items.Add(day);
+                }
+
+                RoomPicker.Items.Add(" ");
+                foreach (string room in uniqueRooms)
+                {
+                    RoomPicker.Items.Add(room);
+                }
             }
+        }
+
+        public void OnClearFiltersButtonClicked(object sender, EventArgs e)
+        {
+            CourseNameFilter.Text = string.Empty;
+            InstructorNameFilter.Text = string.Empty;
+            TimeFilter.Time = TimeSpan.Zero;
+            RoomPicker.SelectedItem = " ";
+            DayPicker.SelectedItem = " ";
         }
 
         private void OnParsingMethodChanged(object sender, CheckedChangedEventArgs e)
@@ -68,7 +106,18 @@ namespace WorkingWithXMLApplication
                 _ => throw new InvalidOperationException("Стратегія не вибрана")
             };
 
-            await Navigation.PushAsync(new InfoSheet(SelectedFilePath, selectedParsingStrategy));
+            string? givenInstructorName = InstructorNameFilter.Text;
+            string? givenTime = TimeFilter.Time == TimeSpan.Zero ? null : TimeFilter.Time.ToString();                        
+            string? givenCourseTitle = CourseNameFilter.Text;
+            string? givenRoom = RoomPicker.SelectedItem as string;
+            string? givenDay = DayPicker.SelectedItem as string;
+
+
+            var newResult = new InfoSheet(SelectedFilePath, selectedParsingStrategy, 
+                instructorName: givenInstructorName, time: givenTime, courseTitle: givenCourseTitle,
+                room: givenRoom, day: givenDay);
+
+            await Navigation.PushAsync(newResult);
         }
     }
 }

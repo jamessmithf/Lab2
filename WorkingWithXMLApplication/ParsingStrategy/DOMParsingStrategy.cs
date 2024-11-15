@@ -13,59 +13,50 @@ namespace WorkingWithXMLApplication.ParsingStrategy
             XmlNodeList courseNodes = xmlDoc.GetElementsByTagName("Course");
             foreach (XmlNode courseNode in courseNodes)
             {
-                var course = new Course { Students = new List<Student>() };
+                var course = new Course
+                {
+                    Students = new List<Student>(),
+                    Day = courseNode.Attributes["Day"]?.Value.Trim(),
+                    Title = courseNode.Attributes["Title"]?.Value.Trim(),
+                    Room = courseNode.Attributes["Room"]?.Value.Trim(),
+                    ScheduleTime = courseNode.Attributes["ScheduleTime"]?.Value.Trim()
+                };
 
                 foreach (XmlNode childNode in courseNode.ChildNodes)
                 {
                     switch (childNode.Name)
                     {
-                        case "Title":
-                            course.Title = childNode.InnerText.Trim();
-                            break;
                         case "Instructor":
-                            var instructor = new Instructor();
-                            foreach (XmlNode instructorNode in childNode.ChildNodes)
+                            var instructor = new Instructor
                             {
-                                switch (instructorNode.Name)
-                                {
-                                    case "FullName":
-                                        instructor.FullName = instructorNode.InnerText.Trim();
-                                        break;
-                                    case "Faculty":
-                                        instructor.Faculty = instructorNode.InnerText.Trim();
-                                        break;
-                                    case "Department":
-                                        instructor.Department = instructorNode.InnerText.Trim();
-                                        break;
-                                }
+                                Faculty = childNode.Attributes["Faculty"]?.Value.Trim(),
+                                Department = childNode.Attributes["Department"]?.Value.Trim()
+                            };
+
+                            foreach (XmlNode instructorDetail in childNode.ChildNodes)
+                            {
+                                if (instructorDetail.Name == "FullName")
+                                    instructor.FullName = instructorDetail.InnerText.Trim();
                             }
                             course.Instructor = instructor;
                             break;
-                        case "Room":
-                            course.Room = childNode.InnerText.Trim();
-                            break;
-                        case "ScheduleTime":
-                            course.ScheduleTime = childNode.InnerText.Trim();
-                            break;
+
                         case "Students":
                             foreach (XmlNode studentNode in childNode.ChildNodes)
                             {
                                 if (studentNode.Name == "Student")
                                 {
-                                    var student = new Student();
-                                    foreach (XmlNode studentDetailNode in studentNode.ChildNodes)
+                                    var student = new Student
                                     {
-                                        switch (studentDetailNode.Name)
-                                        {
-                                            case "FullName":
-                                                student.FullName = studentDetailNode.InnerText.Trim();
-                                                break;
-                                            case "Group":
-                                                student.Group = studentDetailNode.InnerText.Trim();
-                                                break;
-                                        }
+                                        Group = studentNode.Attributes["Group"]?.Value.Trim()
+                                    };
+
+                                    foreach (XmlNode studentDetail in studentNode.ChildNodes)
+                                    {
+                                        if (studentDetail.Name == "FullName")
+                                            student.FullName = studentDetail.InnerText.Trim();
                                     }
-                                    // Додаємо лише, якщо студент містить дійсні дані
+
                                     if (!string.IsNullOrWhiteSpace(student.FullName) && !string.IsNullOrWhiteSpace(student.Group))
                                     {
                                         course.Students.Add(student);
