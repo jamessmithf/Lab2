@@ -1,69 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WorkingWithXMLApplication.MainPage">
+             x:Class="WorkingWithXMLApplication.MainPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-        <VerticalStackLayout
-            Spacing="20"
-            HorizontalOptions="Center"
-            VerticalOptions="Center">
 
+        <StackLayout Spacing="20" Padding="20">
+            
+            <Button x:Name="InfoButton" Clicked="OnInfoButtonClicked" Text="Загальна інформація" VerticalOptions="Start" HorizontalOptions="End" />
             <Label
+                x:Name="TitleText" 
                 Text="Робота з XML файлами"
                 FontAttributes="Bold"
                 FontSize="28"
                 TextColor="#512BD4"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" />
 
             <Button 
+                x:Name="GettingFileButton" 
                 Text="Обрати XML файл" 
                 Clicked="OnOpenFileButtonClicked"
                 HorizontalOptions="Center"
+                VerticalOptions="Center" 
                 BackgroundColor="#512BD4"
                 TextColor="White"
                 FontSize="18"
                 CornerRadius="8"
                 WidthRequest="200" />
 
-            <Label
-                x:Name="PathToFile"
-                Text="Немає обраного файлу"
-                HorizontalOptions="Center"
-                TextColor="Gray"
+            <Label 
+                x:Name="PathToFile" 
+                Text="Немає обраного файлу" 
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" 
+                TextColor="Gray" 
                 FontSize="16"
                 Padding="10,0,10,0"/>
 
             <Label x:Name="ParsingTecnology" Text="Виберіть технологію для парсингу: " FontSize="18" HorizontalOptions="Center" IsVisible="False" Margin="0,20,0,0"/>
             <StackLayout x:Name="ParsingOptions" IsVisible="False" Orientation="Horizontal" HorizontalOptions="Center">
-                <RadioButton 
-                    x:Name="LINQRadioButton" 
-                    GroupName="ParsingTech" 
-                    Content="LINQ" 
-                    Value="LINQ" 
-                    IsChecked="True"
-                    CheckedChanged="OnParsingMethodChanged"/>
-                <RadioButton 
-                    x:Name="SAXRadioButton" 
-                    GroupName="ParsingTech" 
-                    Content="SAX" 
-                    Value="SAX"
-                    CheckedChanged="OnParsingMethodChanged"/>
-                <RadioButton 
-                    x:Name="DOMRadioButton" 
-                    GroupName="ParsingTech" 
-                    Content="DOM" 
-                    Value="DOM"
-                    CheckedChanged="OnParsingMethodChanged"/>
+                <RadioButton x:Name="LINQRadioButton" GroupName="ParsingTech" Content="LINQ" Value="LINQ" IsChecked="True" CheckedChanged="OnParsingMethodChanged"/>
+                <RadioButton x:Name="SAXRadioButton" GroupName="ParsingTech" Content="SAX" Value="SAX" CheckedChanged="OnParsingMethodChanged"/>
+                <RadioButton x:Name="DOMRadioButton" GroupName="ParsingTech" Content="DOM" Value="DOM" CheckedChanged="OnParsingMethodChanged"/>
             </StackLayout>
-            
+
             <Frame x:Name="FiltersMenu" IsVisible="False" BackgroundColor="Linen">
                 <VerticalStackLayout Spacing="25">
-                    <Label 
-                        HorizontalOptions="Center"
-                        Text="Заповнити фільтри для пошуку" 
-                        FontSize="24" 
-                        FontAttributes="Bold" />
+                    <Label HorizontalOptions="Center"
+                            Text="Заповнити фільтри для пошуку"
+                            FontSize="24"
+                            FontAttributes="Bold" />
 
                     <BoxView HeightRequest="1" BackgroundColor="Gray" Margin="0,0,0,0" />
 
@@ -100,17 +88,27 @@
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
-            <Button x:Name="OpenScheduleButton"
-                    Text="Відкрити розклад" 
-                    Clicked="OnOpenScheduleButtonClicked"
-                    HorizontalOptions="Center"
-                    BackgroundColor="#32CD32"
-                    TextColor="White"
-                    FontSize="18"
-                    CornerRadius="8"
-                    WidthRequest="200"
-                    IsVisible="False" />                
-        </VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="15">
+                <Button x:Name="OpenScheduleButton"
+                        Text="Відкрити розклад" 
+                        Clicked="OnOpenScheduleButtonClicked"
+                        HorizontalOptions="Center"
+                        BackgroundColor="#32CD32"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="8"
+                        WidthRequest="200"
+                        IsVisible="False" />
+                <Button x:Name="HTMLTransorm" 
+                        Text="Трансформувати у HTML" 
+                        Clicked="OnHTMLTransormButtonClicked"
+                        HorizontalOptions="Center"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="8"
+                        IsVisible="False"/>
+            </HorizontalStackLayout>
+        </StackLayout>
     </ScrollView>
 
 </ContentPage>

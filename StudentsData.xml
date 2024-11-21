@@ -39,4 +39,157 @@
 			</Student>
 		</Students>
 	</Course>
+	<Course Day="Середа" Title="Теорія ймовірностей" Room="205" ScheduleTime="08:40 - 10:15">
+		<Instructor Faculty="ФКНК" Department="СТС">
+			<FullName>Марія Кириленко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="Середа" Title="Комп'ютерна алгебра" Room="309" ScheduleTime="12:20 - 13:55">
+		<Instructor Faculty="ФКНК" Department="КПЗ">
+			<FullName>Іван Ткаченко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="Четвер" Title="Алгоритми та структури даних" Room="401" ScheduleTime="10:35 - 12:10">
+		<Instructor Faculty="ФКНК" Department="ПМ">
+			<FullName>Анна Петрова</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="Четвер" Title="Чисельні методи" Room="102" ScheduleTime="13:05 - 14:40">
+		<Instructor Faculty="ФКНК" Department="АПМ">
+			<FullName>Олег Радченко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="П'ятниця" Title="Математичний аналіз" Room="307" ScheduleTime="08:40 - 10:15">
+		<Instructor Faculty="ФКНК" Department="АММ">
+			<FullName>Леонід Савченко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="П'ятниця" Title="Теорія кодування" Room="110" ScheduleTime="12:20 - 13:55">
+		<Instructor Faculty="ФКНК" Department="КДЗ">
+			<FullName>Валентина Коваль</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="Субота" Title="Операційні системи" Room="206" ScheduleTime="10:35 - 12:10">
+		<Instructor Faculty="ФКНК" Department="ОС">
+			<FullName>Галина Олексієнко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
+	<Course Day="Субота" Title="Інформатика" Room="103" ScheduleTime="13:05 - 14:40">
+		<Instructor Faculty="ФКНК" Department="ІКТ">
+			<FullName>Микола Бойко</FullName>
+		</Instructor>
+		<Students>
+			<Student Group="К-26">
+				<FullName>Тарас Тертичний</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Всеволод Остапович</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Максим Безверхий</FullName>
+			</Student>
+			<Student Group="К-26">
+				<FullName>Віктор Сікора</FullName>
+			</Student>
+		</Students>
+	</Course>
 </Schedules>
+

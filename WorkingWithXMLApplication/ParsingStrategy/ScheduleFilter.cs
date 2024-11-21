@@ -18,21 +18,26 @@ namespace WorkingWithXMLApplication.ParsingStrategy
         }
 
         /// <summary>
-        /// Returns true if the 'userFilter' has simmilar parts with 'atributesValue'
+        /// Returns true if the 'userFilter' has simmilar parts with 'attributesValue'
         /// </summary>
-        private static bool IsSimilarParts(string? userFilter, string? atributesValue)
+        private static bool IsSimilarParts(string? userFilter, string? attributesValue)
         {
-            var userFilterParts = SplitIntoWords(userFilter.ToLower());
-            var atributesValueParts = SplitIntoWords(atributesValue.ToLower());
+            // Розбиваємо на слова і зводимо до нижнього регістру для порівняння
+            var splitedUserFilter = SplitIntoWords(userFilter?.ToLower());
+            var splitedAtributesValue = SplitIntoWords(attributesValue?.ToLower());
 
-            foreach (string element in userFilterParts)
+            foreach (string filterPart in splitedUserFilter)
             {
-                if (!Array.Exists(atributesValueParts, e => e == element))
+                foreach (string attributePart in splitedAtributesValue)
                 {
-                    return false;
+                    // Перевіряємо, чи є filterPart префіксом attributePart
+                    if (attributePart.StartsWith(filterPart))
+                    {
+                        return true;
+                    }
                 }
             }
-            return true;
+            return false;
         }
 
         public static Schedule FilterSchedule(Schedule schedule, 

@@ -2,12 +2,19 @@
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Xsl;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Maui.Alerts;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.Windows;
+using System.Threading.Tasks;
 
 namespace WorkingWithXMLApplication
 {
     public partial class MainPage : ContentPage
     {
         private string? _selectedFilePath;
+        private string? _filteredXmlFilePath;
 
         private string _selectedParsingMethod = "LINQ";
         private string SelectedParsingMethod { get { return _selectedParsingMethod; } }
@@ -53,6 +60,7 @@ namespace WorkingWithXMLApplication
                 ParsingTecnology.IsVisible = true;
                 ParsingOptions.IsVisible = true;
                 OpenScheduleButton.IsVisible = true;
+                HTMLTransorm.IsVisible = true;
 
                 List<string?> uniqueDays = GetUniqueValue(SelectedFilePath, "Course", "Day");
                 List<string?> uniqueRooms = GetUniqueValue(SelectedFilePath, "Course", "Room");
@@ -68,6 +76,30 @@ namespace WorkingWithXMLApplication
                 {
                     RoomPicker.Items.Add(room);
                 }
+#if WINDOWS
+                Application.Current.Windows[0].Width = 750;
+                Application.Current.Windows[0].Height = 770;
+#endif
+            }
+        }
+
+        public async void OnInfoButtonClicked(object sender, EventArgs e)
+        {
+            bool result = await DisplayAlert("Інформація про програму",
+                $"Роботу виконав Сікора Віктор, студент групи К - 26" +
+                $"\n\nПрограма забезпечує обробку XML-файлів (аналіз та трансформація) з використанням технологій LINQ, SAX та DOM." +
+                $"\nОбраний варіант - \"Розклад\"", 
+                "Зрозуміло", 
+                "Давай чесно!");
+
+            if (result == false)
+            {
+                await DisplayAlert("Інформація про програму",
+                $"Роботу виконав GPT-4o, студент групи К - 26" +
+                $"\n\nПрограма забезпечує обробку XML-файлів (аналіз та трансформація) з використанням технології GPT-4o." +
+                $"\nОбраний варіант - \"Розклад\"" +
+                $"\n\nP.S. Навіщо нам робити кнопку \"Загальна інформація\", якщо це надто проста задача для GPT-4o )))",
+                "Погодитись оцінити на 10 балів");
             }
         }
 
@@ -95,7 +127,6 @@ namespace WorkingWithXMLApplication
             Console.WriteLine($"Selected parsing method: {_selectedParsingMethod}");
         }
 
-
         private async void OnOpenScheduleButtonClicked(object sender, EventArgs e)
         {           
             IParsingStrategy selectedParsingStrategy = SelectedParsingMethod switch
@@ -118,6 +149,54 @@ namespace WorkingWithXMLApplication
                 room: givenRoom, day: givenDay);
 
             await Navigation.PushAsync(newResult);
+        }
+        private async void OnHTMLTransormButtonClicked(object sender, EventArgs e)
+        {
+            // Отримуємо шлях до .xsl файлу
+            var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.WinUI, new[] { ".xsl" } }
+            });
+
+            var xslResult = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Оберіть необхідний .xsl файл",
+                FileTypes = customFileType
+            });
+
+            if (xslResult != null)
+            {
+                string xslFilePath = xslResult.FullPath; // Посилання 
+
+                // Завантаження XSL та створення трансформатора
+                XslCompiledTransform xsl = new XslCompiledTransform();
+                xsl.Load(xslFilePath);
+
+                CancellationTokenSource TokenSource = new CancellationTokenSource();
+                using var stream = new MemoryStream();
+                try
+                {
+                    // Виконання трансформації та запис у MemoryStream
+                    using (XmlReader reader = XmlReader.Create(SelectedFilePath))
+                    using (XmlWriter writer = XmlWriter.Create(stream, xsl.OutputSettings))
+                    {
+                        xsl.Transform(reader, writer);
+                    }
+
+                    // Скидання позиції потоку до початку для подальшого читання
+                    stream.Position = 0;
+
+                    // Збереження результату у файл за допомогою FileSaver
+                    var fileSaverResult = await FileSaver.Default.SaveAsync("TransformedReult.html", stream, TokenSource.Token);
+                    fileSaverResult.EnsureSuccess();
+
+                    await Toast.Make($"HTML файл збережено!").Show();
+                }
+                catch (Exception ex)
+                {
+                    await Toast.Make($"HTML файл не був збережений!").Show();
+                }
+            }
         }
     }
 }
