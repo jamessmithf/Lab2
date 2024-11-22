@@ -4,70 +4,68 @@ namespace WorkingWithXMLApplication.ParsingStrategy
 {
     public static class ScheduleFilter
     {
-        // Допоміжний метод, який спростить використання фільтрів
+        /// <summary>
+        /// Розбиває вхідний рядок на слова та розділові знаки.
+        /// </summary>
         private static string[] SplitIntoWords(string? input)
         {
-            // Використовуємо регулярний вираз для пошуку слів і розділових знаків
-            if (input != null)
-            {
-                var regex = new Regex(@"[\w'-]+|[^\w\s]+");
-                return regex.Matches(input).Select(m => m.Value).ToArray();
-            }
-            else
-                return new string[] { };
+            if (string.IsNullOrWhiteSpace(input))
+                return Array.Empty<string>();
+
+            var regex = new Regex(@"[\w'-]+|[^\w\s]+");
+            return regex.Matches(input).Select(m => m.Value).ToArray();
         }
 
         /// <summary>
-        /// Returns true if the 'userFilter' has simmilar parts with 'attributesValue'
+        /// Перевіряє, чи є часткові збіги між значенням атрибуту та фільтром.
         /// </summary>
         private static bool IsSimilarParts(string? userFilter, string? attributesValue)
         {
-            // Розбиваємо на слова і зводимо до нижнього регістру для порівняння
-            var splitedUserFilter = SplitIntoWords(userFilter?.ToLower());
-            var splitedAtributesValue = SplitIntoWords(attributesValue?.ToLower());
+            var filterParts = SplitIntoWords(userFilter?.ToLower());
+            var attributeParts = SplitIntoWords(attributesValue?.ToLower());
 
-            foreach (string filterPart in splitedUserFilter)
-            {
-                foreach (string attributePart in splitedAtributesValue)
-                {
-                    // Перевіряємо, чи є filterPart префіксом attributePart
-                    if (attributePart.StartsWith(filterPart))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return filterParts.Any(filter =>
+                attributeParts.Any(attribute => attribute.StartsWith(filter)));
         }
 
-        public static Schedule FilterSchedule(Schedule schedule, 
-            string? instructorName = null, 
-            string? time = null, 
-            string? courseTitle = null, 
+        /// <summary>
+        /// Перевіряє, чи час відповідає вказаному інтервалу.
+        /// </summary>
+        private static bool MatchesTime(string? time, TimeOnly[] timeInterval)
+        {
+            if (string.IsNullOrWhiteSpace(time))
+                return true;
+
+            if (!TimeOnly.TryParse(time.Trim(), out var parsedTime))
+                return false;
+
+            return timeInterval[0] <= parsedTime && timeInterval[1] >= parsedTime;
+        }
+
+        /// <summary>
+        /// Відфільтровує розклад за заданими критеріями.
+        /// </summary>
+        public static Schedule FilterSchedule(Schedule schedule,
+            string? instructorName = null,
+            string? time = null,
+            string? courseTitle = null,
             string? room = null,
             string? day = null)
         {
-            // Якщо жоден критерій фільтрації не вказаний, повертаємо початковий розклад
-            if (string.IsNullOrEmpty(instructorName) && string.IsNullOrEmpty(time) && string.IsNullOrEmpty(courseTitle) 
-                && string.IsNullOrEmpty(room) && string.IsNullOrEmpty(day))
+            // Якщо критерії не задані, повертаємо початковий розклад
+            if (new[] { instructorName, time, courseTitle, room, day }.All(string.IsNullOrWhiteSpace))
             {
                 return schedule;
             }
 
-            // Відфільтруємо курси за критеріями, якщо вони вказані
             var filteredCourses = schedule.Courses.Where(course =>
-            {
-                bool matchesInstructor = string.IsNullOrEmpty(instructorName) || IsSimilarParts(instructorName, course.Instructor.FullName);
-                bool matchesTime = string.IsNullOrEmpty(time) || (course.TimeInterval[0] <= TimeOnly.Parse(time.Trim()) & course.TimeInterval[1] >= TimeOnly.Parse(time.Trim()));
-                bool matchesCourseName = string.IsNullOrEmpty(courseTitle) || IsSimilarParts(courseTitle, course.Title);
-                bool matchesRoom = string.IsNullOrEmpty(room) || IsSimilarParts(room, course.Room);
-                bool matchesDay = string.IsNullOrEmpty(day) || IsSimilarParts(day, course.Day);
+                (string.IsNullOrWhiteSpace(instructorName) || IsSimilarParts(instructorName, course.Instructor.FullName)) &&
+                MatchesTime(time, course.TimeInterval) &&
+                (string.IsNullOrWhiteSpace(courseTitle) || IsSimilarParts(courseTitle, course.Title)) &&
+                (string.IsNullOrWhiteSpace(room) || IsSimilarParts(room, course.Room)) &&
+                (string.IsNullOrWhiteSpace(day) || IsSimilarParts(day, course.Day))
+            ).ToList();
 
-                // Курс відповідає, якщо всі задані критерії задовольняють умову
-                return matchesInstructor && matchesTime && matchesCourseName && matchesRoom && matchesDay;
-            }).ToList();
-
-            // Повертаємо новий об'єкт розкладу з відфільтрованими курсами
             return new Schedule { Courses = filteredCourses };
         }
     }

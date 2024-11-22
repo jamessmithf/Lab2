@@ -101,7 +101,7 @@
                         IsVisible="False" />
                 <Button x:Name="HTMLTransorm" 
                         Text="Трансформувати у HTML" 
-                        Clicked="OnHTMLTransormButtonClicked"
+                        Clicked="OnHTMLTransformButtonClicked"
                         HorizontalOptions="Center"
                         TextColor="White"
                         FontSize="18"

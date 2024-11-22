@@ -2,105 +2,100 @@
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Xsl;
-using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Alerts;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using System.Windows;
-using System.Threading.Tasks;
+using CommunityToolkit.Maui.Storage;
 
 namespace WorkingWithXMLApplication
 {
     public partial class MainPage : ContentPage
     {
         private string? _selectedFilePath;
-        private string? _filteredXmlFilePath;
-
         private string _selectedParsingMethod = "LINQ";
-        private string SelectedParsingMethod { get { return _selectedParsingMethod; } }
-        public string? SelectedFilePath { get { return _selectedFilePath; } }
+
         public MainPage()
         {
             InitializeComponent();
         }
 
-        public static List<string?> GetUniqueValue(string filePath, string node, string atribute)
+        public string SelectedParsingMethod => _selectedParsingMethod;
+        public string? SelectedFilePath => _selectedFilePath;
+
+        public static List<string?> GetUniqueValues(string filePath, string node, string attribute)
         {
-            
             var xmlDocument = XDocument.Load(filePath);
-
-            // Отримати унікальні значення атрибуту "atribute" з елементів "node"
-            var uniqueValues = xmlDocument.Descendants(node)
-                                .Select(course => (string)course.Attribute(atribute))
-                                .Where(day => day != null) // Перевірка на null
-                                .Distinct()
-                                .ToList();
-
-            return uniqueValues;
-        }
-
-        public async void OnOpenFileButtonClicked(object sender, EventArgs e)
-        {
-            var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
-            {
-                { DevicePlatform.WinUI, new[]{ ".xml" } }
-            });
-            var result = await FilePicker.PickAsync(new PickOptions
-            {
-                PickerTitle = "Оберіть необхідний .xml файл",
-                FileTypes = customFileType
-            });
-
-            if (result != null)
-            {
-                _selectedFilePath = result.FullPath;
-                PathToFile.Text = $"Відкрито {SelectedFilePath}";
-
-                FiltersMenu.IsVisible = true;
-                ParsingTecnology.IsVisible = true;
-                ParsingOptions.IsVisible = true;
-                OpenScheduleButton.IsVisible = true;
-                HTMLTransorm.IsVisible = true;
-
-                List<string?> uniqueDays = GetUniqueValue(SelectedFilePath, "Course", "Day");
-                List<string?> uniqueRooms = GetUniqueValue(SelectedFilePath, "Course", "Room");
-
-                DayPicker.Items.Add(" ");
-                foreach (string day in uniqueDays)
-                {
-                    DayPicker.Items.Add(day);
-                }
-
-                RoomPicker.Items.Add(" ");
-                foreach (string room in uniqueRooms)
-                {
-                    RoomPicker.Items.Add(room);
-                }
-#if WINDOWS
-                Application.Current.Windows[0].Width = 750;
-                Application.Current.Windows[0].Height = 770;
-#endif
-            }
+            return xmlDocument.Descendants(node)
+                              .Select(element => (string?)element.Attribute(attribute))
+                              .Where(value => !string.IsNullOrEmpty(value))
+                              .Distinct()
+                              .ToList();
         }
 
         public async void OnInfoButtonClicked(object sender, EventArgs e)
         {
-            bool result = await DisplayAlert("Інформація про програму",
-                $"Роботу виконав Сікора Віктор, студент групи К - 26" +
-                $"\n\nПрограма забезпечує обробку XML-файлів (аналіз та трансформація) з використанням технологій LINQ, SAX та DOM." +
-                $"\nОбраний варіант - \"Розклад\"", 
-                "Зрозуміло", 
-                "Давай чесно!");
+            string studentInfo = "Роботу виконав Сікора Віктор, студент групи К - 26\n" +
+                                 "Програма забезпечує обробку XML-файлів (аналіз та трансформація) " +
+                                 "з використанням технологій LINQ, SAX та DOM.\nОбраний варіант - \"Розклад\"";
 
-            if (result == false)
+            string gptInfo = "Роботу виконав GPT-4o, студент групи К - 26\n" +
+                             "Програма забезпечує обробку XML-файлів (аналіз та трансформація) " +
+                             "з використанням технології GPT-4o.\nОбраний варіант - \"Розклад\"\n\n" +
+                             "P.S. Навіщо нам робити кнопку \"Загальна інформація\", " +
+                             "якщо це надто проста задача для GPT-4o )))";
+
+            bool result = await DisplayAlert("Інформація про програму", studentInfo, "Зрозуміло", "Давай чесно!");
+
+            if (!result)
             {
-                await DisplayAlert("Інформація про програму",
-                $"Роботу виконав GPT-4o, студент групи К - 26" +
-                $"\n\nПрограма забезпечує обробку XML-файлів (аналіз та трансформація) з використанням технології GPT-4o." +
-                $"\nОбраний варіант - \"Розклад\"" +
-                $"\n\nP.S. Навіщо нам робити кнопку \"Загальна інформація\", якщо це надто проста задача для GPT-4o )))",
-                "Погодитись оцінити на 10 балів");
+                await DisplayAlert("Інформація про програму", gptInfo, "Погодитись оцінити на 10 балів");
             }
+        }
+
+        private async Task HandleFileSelectionAsync(string fileType, string pickerTitle, Action<string> onSuccess)
+        {
+            var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.WinUI, new[] { fileType } }
+            });
+
+            var result = await FilePicker.PickAsync(new PickOptions { PickerTitle = pickerTitle, FileTypes = customFileType });
+
+            if (result?.FullPath is string filePath)
+                onSuccess(filePath);
+        }
+
+        public async void OnOpenFileButtonClicked(object sender, EventArgs e)
+        {
+            await HandleFileSelectionAsync(".xml", "Оберіть XML файл", filePath =>
+            {
+                _selectedFilePath = filePath;
+                PathToFile.Text = $"Відкрито {filePath}";
+                ToggleUIElementsVisibility(true);
+
+                PopulatePicker(DayPicker, GetUniqueValues(filePath, "Course", "Day"));
+                PopulatePicker(RoomPicker, GetUniqueValues(filePath, "Course", "Room"));
+
+#if WINDOWS
+                Application.Current.Windows[0].Width = 750;
+                Application.Current.Windows[0].Height = 770;
+#endif
+            });
+        }
+
+        private void ToggleUIElementsVisibility(bool isVisible)
+        {
+            FiltersMenu.IsVisible = isVisible;
+            ParsingTecnology.IsVisible = isVisible;
+            ParsingOptions.IsVisible = isVisible;
+            OpenScheduleButton.IsVisible = isVisible;
+            HTMLTransorm.IsVisible = isVisible;
+        }
+
+        private static void PopulatePicker(Picker picker, IEnumerable<string?> items)
+        {
+            picker.Items.Clear();
+            picker.Items.Add(" ");
+            foreach (var item in items.Where(i => !string.IsNullOrWhiteSpace(i)))
+                picker.Items.Add(item);
         }
 
         public void OnClearFiltersButtonClicked(object sender, EventArgs e)
@@ -108,95 +103,75 @@ namespace WorkingWithXMLApplication
             CourseNameFilter.Text = string.Empty;
             InstructorNameFilter.Text = string.Empty;
             TimeFilter.Time = TimeSpan.Zero;
-            RoomPicker.SelectedItem = " ";
-            DayPicker.SelectedItem = " ";
+            DayPicker.SelectedIndex = -1;
+            RoomPicker.SelectedIndex = -1;
         }
 
         private void OnParsingMethodChanged(object sender, CheckedChangedEventArgs e)
         {
-            // Check if RadioButton's CheckedChanged event is called
-            Console.WriteLine("CheckedChanged triggered");
-
-            if (LINQRadioButton.IsChecked)
-                _selectedParsingMethod = "LINQ";
-            else if (SAXRadioButton.IsChecked)
-                _selectedParsingMethod = "SAX";
-            else if (DOMRadioButton.IsChecked)
-                _selectedParsingMethod = "DOM";
-
-            Console.WriteLine($"Selected parsing method: {_selectedParsingMethod}");
+            _selectedParsingMethod = LINQRadioButton.IsChecked ? "LINQ" :
+                                      SAXRadioButton.IsChecked ? "SAX" :
+                                      DOMRadioButton.IsChecked ? "DOM" : _selectedParsingMethod;
         }
 
         private async void OnOpenScheduleButtonClicked(object sender, EventArgs e)
-        {           
-            IParsingStrategy selectedParsingStrategy = SelectedParsingMethod switch
+        {
+            if (_selectedFilePath == null)
+            {
+                await DisplayAlert("Помилка", "Файл не вибрано", "ОК");
+                return;
+            }
+
+            IParsingStrategy selectedParsingStrategy = _selectedParsingMethod switch
             {
                 "LINQ" => new LINQParsingStrategy(),
                 "SAX" => new SAXParsingStrategy(),
                 "DOM" => new DOMParsingStrategy(),
-                _ => throw new InvalidOperationException("Стратегія не вибрана")
+                _ => throw new InvalidOperationException("Невідома стратегія парсингу")
             };
 
-            string? givenInstructorName = InstructorNameFilter.Text;
-            string? givenTime = TimeFilter.Time == TimeSpan.Zero ? null : TimeFilter.Time.ToString();                        
-            string? givenCourseTitle = CourseNameFilter.Text;
-            string? givenRoom = RoomPicker.SelectedItem as string;
-            string? givenDay = DayPicker.SelectedItem as string;
-
-
-            var newResult = new InfoSheet(SelectedFilePath, selectedParsingStrategy, 
-                instructorName: givenInstructorName, time: givenTime, courseTitle: givenCourseTitle,
-                room: givenRoom, day: givenDay);
+            var newResult = new InfoSheet(
+                _selectedFilePath,
+                selectedParsingStrategy,
+                InstructorNameFilter.Text,
+                TimeFilter.Time == TimeSpan.Zero ? null : TimeFilter.Time.ToString(),
+                CourseNameFilter.Text,
+                RoomPicker.SelectedItem as string,
+                DayPicker.SelectedItem as string);
 
             await Navigation.PushAsync(newResult);
         }
-        private async void OnHTMLTransormButtonClicked(object sender, EventArgs e)
+
+        private async void OnHTMLTransformButtonClicked(object sender, EventArgs e)
         {
-            // Отримуємо шлях до .xsl файлу
-            var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            await HandleFileSelectionAsync(".xsl", "Оберіть XSL файл", async xslFilePath =>
             {
-                { DevicePlatform.WinUI, new[] { ".xsl" } }
-            });
-
-            var xslResult = await FilePicker.PickAsync(new PickOptions
-            {
-                PickerTitle = "Оберіть необхідний .xsl файл",
-                FileTypes = customFileType
-            });
-
-            if (xslResult != null)
-            {
-                string xslFilePath = xslResult.FullPath; // Посилання 
-
-                // Завантаження XSL та створення трансформатора
-                XslCompiledTransform xsl = new XslCompiledTransform();
-                xsl.Load(xslFilePath);
-
-                CancellationTokenSource TokenSource = new CancellationTokenSource();
-                using var stream = new MemoryStream();
                 try
                 {
-                    // Виконання трансформації та запис у MemoryStream
-                    using (XmlReader reader = XmlReader.Create(SelectedFilePath))
-                    using (XmlWriter writer = XmlWriter.Create(stream, xsl.OutputSettings))
+                    if (_selectedFilePath == null)
+                        throw new InvalidOperationException("Файл не вибрано");
+
+                    using var stream = new MemoryStream();
+                    var xsl = new XslCompiledTransform();
+                    xsl.Load(xslFilePath);
+
+                    using (var reader = XmlReader.Create(_selectedFilePath))
+                    using (var writer = XmlWriter.Create(stream, xsl.OutputSettings))
                     {
                         xsl.Transform(reader, writer);
                     }
 
-                    // Скидання позиції потоку до початку для подальшого читання
                     stream.Position = 0;
+                    var saveResult = await FileSaver.Default.SaveAsync("TransformedResult.html", stream);
+                    saveResult.EnsureSuccess();
 
-                    // Збереження результату у файл за допомогою FileSaver
-                    var fileSaverResult = await FileSaver.Default.SaveAsync("TransformedReult.html", stream, TokenSource.Token);
-                    fileSaverResult.EnsureSuccess();
-
-                    await Toast.Make($"HTML файл збережено!").Show();
+                    await Toast.Make("HTML файл збережено!").Show();
                 }
                 catch (Exception ex)
                 {
-                    await Toast.Make($"HTML файл не був збережений!").Show();
+                    await Toast.Make($"Файл не збережено!\n{ex.Message}").Show();
                 }
-            }
+            });
         }
     }
 }
